@@ -25,6 +25,7 @@
             "type": "AMAZON.FirstName"
           }],
           "samples": [
+            "find whether {first_name} has been adopted",
             "has {first_name} been adopted",
             "what is {first_name} adoption status",
             "was {first_name} adopted"
