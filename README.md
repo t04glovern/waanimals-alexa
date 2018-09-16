@@ -1,5 +1,7 @@
 # WA Animals Alexa
 
+Alexa skill for interacting with the current list of animals up for adoption at [WA Animals](https://waanimals.org.au)
+
 ## CloudFormation Deploy
 
 [![https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/new?stackName=WA-Animals-Alexa-Service&templateURL=https://s3.amazonaws.com/waanimals-deployment-scripts/catastic-alexa/waa-cf-deploy.json)
