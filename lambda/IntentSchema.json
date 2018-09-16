@@ -1,0 +1,51 @@
+{
+  "interactionModel": {
+    "languageModel": {
+      "invocationName": "catastic adoptions",
+      "intents": [{
+          "name": "AMAZON.CancelIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.HelpIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.StopIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.NavigateHomeIntent",
+          "samples": []
+        },
+        {
+          "name": "AdoptedIntent",
+          "slots": [{
+            "name": "first_name",
+            "type": "AMAZON.FirstName"
+          }],
+          "samples": [
+            "has {first_name} been adopted",
+            "what is {first_name} adoption status",
+            "was {first_name} adopted"
+          ]
+        },
+        {
+          "name": "DetailedIntent",
+          "slots": [{
+            "name": "first_name",
+            "type": "AMAZON.FirstName"
+          }],
+          "samples": [
+            "what can you tell me about {first_name}",
+            "describe {first_name}",
+            "whats the backstory of {first_name}",
+            "whats {first_name} story",
+            "tell me about {first_name}"
+          ]
+        }
+      ],
+      "types": []
+    }
+  }
+}
