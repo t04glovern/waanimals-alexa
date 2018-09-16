@@ -1,10 +1,10 @@
 {
-  "name": "catastic_alexa",
+  "name": "waa-alexa",
   "version": "1.0.0",
   "description": "alexa lambda function to read topics from dynamodb",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "deploy": "zip -r catastic-alexa.zip * && aws s3 cp catastic-alexa.zip s3://waanimals-deployment-scripts/catastic-alexa/ && rm catastic-alexa.zip"
   },
   "author": "Nathan Glover <nathan@glovers.id.au>",
   "license": "MIT",

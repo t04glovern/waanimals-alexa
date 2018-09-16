@@ -1,0 +1,13 @@
+[{
+        "ParameterKey": "FunctionName",
+        "ParameterValue": "waanimals-alexa-skill-function"
+    },
+    {
+        "ParameterKey": "BucketName",
+        "ParameterValue": "waanimals-deployment-scripts"
+    },
+    {
+        "ParameterKey": "PackagePath",
+        "ParameterValue": "catastic-alexa/catastic-alexa.zip"
+    }
+]

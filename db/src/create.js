@@ -32,7 +32,7 @@ var params = {
         ReadCapacityUnits: 5,
         WriteCapacityUnits: 5
     },
-    TableName: 'catasticRecords',
+    TableName: config.dynamo.tableName,
     StreamSpecification: {
         StreamEnabled: true,
         StreamViewType: 'NEW_AND_OLD_IMAGES'

@@ -139,6 +139,85 @@ const DetailedHandler = {
     }
 };
 
+const ImportantHandler = {
+    canHandle(handlerInput) {
+        return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
+            handlerInput.requestEnvelope.request.intent.name === 'ImportantIntent';
+    },
+    async handle(handlerInput) {
+        const requestAttributes = handlerInput.attributesManager.getRequestAttributes();
+        const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
+        const request = handlerInput.requestEnvelope.request;
+
+        let name;
+        if (request.intent.slots.first_name.value && request.intent.slots.first_name.value !== "?") {
+            name = request.intent.slots.first_name.value;
+        }
+
+        let speakOutput = "";
+        let catItems = await getCatByName(name);
+
+        if (catItems.Count > 0) {
+            let cat = catItems.Items[0];
+
+            let vaccinated = cat.cattributes.includes("vaccinated");
+            let microchipped = cat.cattributes.includes("microchipped");
+            let desexed = cat.cattributes.includes("desexed");
+            let children = cat.cattributes.includes("children");
+
+            let response = name;
+
+            if (vaccinated) {
+                response += " is Vaccinated, "
+            } else {
+                response += " is not Vaccinated yet, "
+            }
+            if (microchipped) {
+                response += "has been Microchipped, "
+            } else {
+                response += "has not been Microchipped, "
+            }
+            if (desexed) {
+                response += "and has been desexed. "
+            } else {
+                response += "and needs to be desexed. "
+            }
+            if (children) {
+                if (desexed) {
+                    response += name + " is also good with children!"
+                } else if (!desexed) {
+                    response += name + " is however very good with children!"
+                }
+            }
+
+            sessionAttributes.speakOutput = response;
+            handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
+
+            return handlerInput.responseBuilder
+                .speak(sessionAttributes.speakOutput)
+                .getResponse();
+        } else {
+            speakOutput = requestAttributes.t('CAT_NOT_FOUND_MESSAGE');
+            const repromptSpeech = requestAttributes.t('CAT_NOT_FOUND_REPROMPT');
+            if (name) {
+                speakOutput += requestAttributes.t('CAT_NOT_FOUND_WITH_ITEM_NAME', name);
+            } else {
+                speakOutput += requestAttributes.t('CAT_NOT_FOUND_WITHOUT_ITEM_NAME');
+            }
+            speakOutput += repromptSpeech;
+
+            sessionAttributes.speakOutput = speakOutput;
+            sessionAttributes.repromptSpeech = repromptSpeech;
+
+            handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
+
+            return handlerInput.responseBuilder
+                .speak(sessionAttributes.speakOutput)
+                .reprompt(sessionAttributes.repromptSpeech)
+                .getResponse();
+        }
+    }
+};
 
 const HelpHandler = {
     canHandle(handlerInput) {
@@ -221,7 +300,7 @@ const skillBuilder = Alexa.SkillBuilders.custom();
 const languageStrings = {
     en: {
         translation: {
-            SKILL_NAME: 'Catastic Adoptions',
+            SKILL_NAME: 'W.A Animal Adoptions',
             WELCOME_MESSAGE: 'Welcome to %s. You can ask questions such as, has %s been adopted...Now, what can I help you with?',
             WELCOME_REPROMPT: 'For instructions on what you can say, please say help me.',
             DISPLAY_CARD_TITLE: '%s  - Info about %s.',
@@ -288,6 +367,7 @@ exports.handler = skillBuilder
         LaunchRequestHandler,
         AdoptedHandler,
         DetailedHandler,
+        ImportantHandler,
         HelpHandler,
         RepeatHandler,
         ExitHandler,

@@ -1,4 +1,4 @@
-# DB Import
+# WAA DB Manager
 
 <img src="img/dynamodb-import.png" data-canonical-src="img/dynamodb-import.png" align="center"/>
 

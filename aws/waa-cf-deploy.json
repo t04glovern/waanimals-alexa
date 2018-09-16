@@ -1,0 +1,132 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Parameters": {
+    "FunctionName": {
+      "Description": "Give your Skill Function a Friendly Name",
+      "Type": "String",
+      "Default": "waanimals-alexa-skill-function"
+    },
+    "BucketName": {
+      "Description": "The S3 bucket where our skill code is stored",
+      "Type": "String",
+      "Default": "waanimals-deployment-scripts"
+    },
+    "PackagePath": {
+      "Description": "The Path within the S3 bucket to the zipped node.js package",
+      "Type": "String",
+      "Default": "catastic-alexa/catastic-alexa.zip"
+    }
+  },
+  "Resources": {
+    "LambdaFunctionRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [{
+            "Effect": "Allow",
+            "Principal": {
+              "Service": [
+                "lambda.amazonaws.com"
+              ]
+            },
+            "Action": [
+              "sts:AssumeRole"
+            ]
+          }]
+        },
+        "Path": "/",
+        "Policies": [{
+          "PolicyName": "AlexaSkillCloudWatchLogsAccess",
+          "PolicyDocument": {
+            "Version": "2012-10-17",
+            "Statement": [{
+                "Sid": "AllowLogging",
+                "Effect": "Allow",
+                "Action": [
+                  "logs:CreateLogGroup",
+                  "logs:CreateLogStream",
+                  "logs:PutLogEvents"
+                ],
+                "Resource": [
+                  "*"
+                ]
+              },
+              {
+                "Effect": "Allow",
+                "Action": [
+                  "dynamodb:BatchGetItem",
+                  "dynamodb:GetItem",
+                  "dynamodb:Query",
+                  "dynamodb:Scan",
+                  "dynamodb:BatchWriteItem",
+                  "dynamodb:PutItem",
+                  "dynamodb:UpdateItem"
+                ],
+                "Resource": "*"
+              }
+            ]
+          }
+        }]
+      }
+    },
+    "AlexaSkillFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "FunctionName"
+        },
+        "Handler": "index.handler",
+        "Role": {
+          "Fn::GetAtt": [
+            "LambdaFunctionRole",
+            "Arn"
+          ]
+        },
+        "Description": {
+          "Fn::Join": [
+            "",
+            [
+              "Alexa Skill code for the ",
+              {
+                "Ref": "FunctionName"
+              },
+              " skill."
+            ]
+          ]
+        },
+        "Code": {
+          "S3Bucket": {
+            "Ref": "BucketName"
+          },
+          "S3Key": {
+            "Ref": "PackagePath"
+          }
+        },
+        "Runtime": "nodejs8.10",
+        "Timeout": "10"
+      }
+    },
+    "AlexaSkillFunctionPermissions": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "AlexaSkillFunction"
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "alexa-appkit.amazon.com"
+      }
+    }
+  },
+  "Outputs": {
+    "FunctionARN": {
+      "Value": {
+        "Fn::GetAtt": [
+          "AlexaSkillFunction",
+          "Arn"
+        ]
+      },
+      "Description": "Lambda function ARN to be placed in the Amazon Developer Portal"
+    }
+  }
+}

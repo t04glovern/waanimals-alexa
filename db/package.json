@@ -1,5 +1,5 @@
 {
-  "name": "catastic-db",
+  "name": "waa-db-manage",
   "version": "1.0.0",
   "description": "store cats in DynamoDB",
   "scripts": {
