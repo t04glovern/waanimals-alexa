@@ -5,26 +5,26 @@ let docClient = new AWS.DynamoDB.DocumentClient({
 });
 
 var fs = require('fs');
-var catJson = JSON.parse(fs.readFileSync('cats.json', 'utf8'));
+var animalJson = JSON.parse(fs.readFileSync('animals.json', 'utf8'));
 
-function addToCatsTable(cat) {
+function addToAnimalTable(animal) {
   let params = {
     TableName: config.dynamo.tableName,
     Item: {
       timestamp: new Date().getTime(),
-      id: cat.cat_id,
-      catName: cat.name,
-      adopted: cat.adopted,
-      like_counter: cat.like_counter,
-      location: cat.location,
-      cattributes: cat.cattributes,
-      description: cat.description
+      id: animal.animal_id,
+      animal_name: animal.name,
+      adopted: animal.adopted,
+      like_counter: animal.like_counter,
+      location: animal.location,
+      attributes: animal.cattributes,
+      description: animal.description
     }
   };
 
   return docClient.put(params).promise()
 };
 
-catJson.forEach(cat => {
-  addToCatsTable(cat);
+animalJson.forEach(animal => {
+  addToAnimalTable(animal);
 });

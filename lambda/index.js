@@ -7,7 +7,7 @@ const AWS = require("aws-sdk");
 const i18n = require('i18next');
 const sprintf = require('i18next-sprintf-postprocessor');
 
-/* INTENT HANDLERS */
+/* CUSTOM INTENT HANDLERS */
 const LaunchRequestHandler = {
     canHandle(handlerInput) {
         return handlerInput.requestEnvelope.request.type === 'LaunchRequest';
@@ -16,7 +16,7 @@ const LaunchRequestHandler = {
         const requestAttributes = handlerInput.attributesManager.getRequestAttributes();
         const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
 
-        const speakOutput = requestAttributes.t('WELCOME_MESSAGE', requestAttributes.t('SKILL_NAME'), "Felix");
+        const speakOutput = requestAttributes.t('WELCOME_MESSAGE', requestAttributes.t('SKILL_NAME'), "Felix", "Frankie");
         const repromptOutput = requestAttributes.t('WELCOME_REPROMPT');
 
         handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
@@ -26,6 +26,27 @@ const LaunchRequestHandler = {
             .reprompt(repromptOutput)
             .getResponse();
     },
+};
+
+const InformationHandler = {
+    canHandle(handlerInput) {
+        return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
+            handlerInput.requestEnvelope.request.intent.name === 'InformationIntent';
+    },
+    async handle(handlerInput) {
+        const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
+
+        const speakOutput = requestAttributes.t('ADOPTION_INFORMATION');
+        const repromptOutput = requestAttributes.t('WELCOME_REPROMPT');
+
+        handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
+
+        return handlerInput.responseBuilder
+            .speak(speakOutput)
+            .reprompt(repromptOutput)
+            .getResponse();
+
+    }
 };
 
 const AdoptedHandler = {
@@ -39,18 +60,18 @@ const AdoptedHandler = {
         const request = handlerInput.requestEnvelope.request;
 
         let name;
-        if (request.intent.slots.first_name.value && request.intent.slots.first_name.value !== "?") {
-            name = request.intent.slots.first_name.value;
+        if (request.intent.slots.animal_name.value && request.intent.slots.animal_name.value !== "?") {
+            name = request.intent.slots.animal_name.value;
         }
 
         let speakOutput = "";
-        let catItems = await getCatByName(name);
+        let animalItems = await getAnimalByName(name);
 
-        if (catItems.Count > 0) {
-            let cat = catItems.Items[0];
+        if (animalItems.Count > 0) {
+            let animal = animalItems.Items[0];
 
-            if (cat.adopted) {
-                let response = cat.catName + " has been adopted";
+            if (animal.adopted) {
+                let response = animal.catName + " has been adopted";
                 sessionAttributes.speakOutput = response;
                 handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
 
@@ -58,7 +79,7 @@ const AdoptedHandler = {
                     .speak(sessionAttributes.speakOutput)
                     .getResponse();
             } else {
-                let response = cat.catName + " has not been adopted";
+                let response = animal.catName + " has not been adopted";
                 sessionAttributes.speakOutput = response;
                 handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
 
@@ -67,12 +88,12 @@ const AdoptedHandler = {
                     .getResponse();
             }
         } else {
-            speakOutput = requestAttributes.t('CAT_NOT_FOUND_MESSAGE');
-            const repromptSpeech = requestAttributes.t('CAT_NOT_FOUND_REPROMPT');
+            speakOutput = requestAttributes.t('ANIMAL_NOT_FOUND_MESSAGE');
+            const repromptSpeech = requestAttributes.t('ANIMAL_NOT_FOUND_REPROMPT');
             if (name) {
-                speakOutput += requestAttributes.t('CAT_NOT_FOUND_WITH_ITEM_NAME', name);
+                speakOutput += requestAttributes.t('ANIMAL_NOT_FOUND_WITH_ITEM_NAME', name);
             } else {
-                speakOutput += requestAttributes.t('CAT_NOT_FOUND_WITHOUT_ITEM_NAME');
+                speakOutput += requestAttributes.t('ANIMAL_NOT_FOUND_WITHOUT_ITEM_NAME');
             }
             speakOutput += repromptSpeech;
 
@@ -100,16 +121,16 @@ const DetailedHandler = {
         const request = handlerInput.requestEnvelope.request;
 
         let name;
-        if (request.intent.slots.first_name.value && request.intent.slots.first_name.value !== "?") {
-            name = request.intent.slots.first_name.value;
+        if (request.intent.slots.animal_name.value && request.intent.slots.animal_name.value !== "?") {
+            name = request.intent.slots.animal_name.value;
         }
 
         let speakOutput = "";
-        let catItems = await getCatByName(name);
+        let animalItems = await getAnimalByName(name);
 
-        if (catItems.Count > 0) {
-            let cat = catItems.Items[0];
-            let response = cat.description;
+        if (animalItems.Count > 0) {
+            let animal = animalItems.Items[0];
+            let response = animal.description;
             sessionAttributes.speakOutput = response;
             handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
 
@@ -117,12 +138,12 @@ const DetailedHandler = {
                 .speak(sessionAttributes.speakOutput)
                 .getResponse();
         } else {
-            speakOutput = requestAttributes.t('CAT_NOT_FOUND_MESSAGE');
-            const repromptSpeech = requestAttributes.t('CAT_NOT_FOUND_REPROMPT');
+            speakOutput = requestAttributes.t('ANIMAL_NOT_FOUND_MESSAGE');
+            const repromptSpeech = requestAttributes.t('ANIMAL_NOT_FOUND_REPROMPT');
             if (name) {
-                speakOutput += requestAttributes.t('CAT_NOT_FOUND_WITH_ITEM_NAME', name);
+                speakOutput += requestAttributes.t('ANIMAL_NOT_FOUND_WITH_ITEM_NAME', name);
             } else {
-                speakOutput += requestAttributes.t('CAT_NOT_FOUND_WITHOUT_ITEM_NAME');
+                speakOutput += requestAttributes.t('ANIMAL_NOT_FOUND_WITHOUT_ITEM_NAME');
             }
             speakOutput += repromptSpeech;
 
@@ -139,10 +160,10 @@ const DetailedHandler = {
     }
 };
 
-const ImportantHandler = {
+const AttributeHandler = {
     canHandle(handlerInput) {
         return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
-            handlerInput.requestEnvelope.request.intent.name === 'ImportantIntent';
+            handlerInput.requestEnvelope.request.intent.name === 'AttributeIntent';
     },
     async handle(handlerInput) {
         const requestAttributes = handlerInput.attributesManager.getRequestAttributes();
@@ -150,20 +171,20 @@ const ImportantHandler = {
         const request = handlerInput.requestEnvelope.request;
 
         let name;
-        if (request.intent.slots.first_name.value && request.intent.slots.first_name.value !== "?") {
-            name = request.intent.slots.first_name.value;
+        if (request.intent.slots.animal_name.value && request.intent.slots.animal_name.value !== "?") {
+            name = request.intent.slots.animal_name.value;
         }
 
         let speakOutput = "";
-        let catItems = await getCatByName(name);
+        let animalItems = await getAnimalByName(name);
 
-        if (catItems.Count > 0) {
-            let cat = catItems.Items[0];
+        if (animalItems.Count > 0) {
+            let animal = animalItems.Items[0];
 
-            let vaccinated = cat.cattributes.includes("vaccinated");
-            let microchipped = cat.cattributes.includes("microchipped");
-            let desexed = cat.cattributes.includes("desexed");
-            let children = cat.cattributes.includes("children");
+            let vaccinated = animal.attributes.includes("vaccinated");
+            let microchipped = animal.attributes.includes("microchipped");
+            let desexed = animal.attributes.includes("desexed");
+            let children = animal.attributes.includes("children");
 
             let response = name;
 
@@ -197,12 +218,12 @@ const ImportantHandler = {
                 .speak(sessionAttributes.speakOutput)
                 .getResponse();
         } else {
-            speakOutput = requestAttributes.t('CAT_NOT_FOUND_MESSAGE');
-            const repromptSpeech = requestAttributes.t('CAT_NOT_FOUND_REPROMPT');
+            speakOutput = requestAttributes.t('ANIMAL_NOT_FOUND_MESSAGE');
+            const repromptSpeech = requestAttributes.t('ANIMAL_NOT_FOUND_REPROMPT');
             if (name) {
-                speakOutput += requestAttributes.t('CAT_NOT_FOUND_WITH_ITEM_NAME', name);
+                speakOutput += requestAttributes.t('ANIMAL_NOT_FOUND_WITH_ITEM_NAME', name);
             } else {
-                speakOutput += requestAttributes.t('CAT_NOT_FOUND_WITHOUT_ITEM_NAME');
+                speakOutput += requestAttributes.t('ANIMAL_NOT_FOUND_WITHOUT_ITEM_NAME');
             }
             speakOutput += repromptSpeech;
 
@@ -219,6 +240,58 @@ const ImportantHandler = {
     }
 };
 
+const WhereHandler = {
+    canHandle(handlerInput) {
+        return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
+            handlerInput.requestEnvelope.request.intent.name === 'WhereIntent';
+    },
+    async handle(handlerInput) {
+        const requestAttributes = handlerInput.attributesManager.getRequestAttributes();
+        const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
+        const request = handlerInput.requestEnvelope.request;
+
+        let name;
+        if (request.intent.slots.animal_name.value && request.intent.slots.animal_name.value !== "?") {
+            name = request.intent.slots.animal_name.value;
+        }
+
+        let speakOutput = "";
+        let animalItems = await getAnimalByName(name);
+
+        if (animalItems.Count > 0) {
+            let animal = animalItems.Items[0];
+
+            let response = name + " can be picked up from a carer in " + animal.location;
+            sessionAttributes.speakOutput = response;
+            handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
+
+            return handlerInput.responseBuilder
+                .speak(sessionAttributes.speakOutput)
+                .getResponse();
+        } else {
+            speakOutput = requestAttributes.t('ANIMAL_NOT_FOUND_MESSAGE');
+            const repromptSpeech = requestAttributes.t('ANIMAL_NOT_FOUND_REPROMPT');
+            if (name) {
+                speakOutput += requestAttributes.t('ANIMAL_NOT_FOUND_WITH_ITEM_NAME', name);
+            } else {
+                speakOutput += requestAttributes.t('ANIMAL_NOT_FOUND_WITHOUT_ITEM_NAME');
+            }
+            speakOutput += repromptSpeech;
+
+            sessionAttributes.speakOutput = speakOutput;
+            sessionAttributes.repromptSpeech = repromptSpeech;
+
+            handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
+
+            return handlerInput.responseBuilder
+                .speak(sessionAttributes.speakOutput)
+                .reprompt(sessionAttributes.repromptSpeech)
+                .getResponse();
+        }
+    }
+};
+
+/* GENERIC INTENT HANDLERS */
 const HelpHandler = {
     canHandle(handlerInput) {
         return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
@@ -280,7 +353,6 @@ const SessionEndedRequestHandler = {
     },
 };
 
-
 const ErrorHandler = {
     canHandle() {
         return true;
@@ -300,18 +372,19 @@ const skillBuilder = Alexa.SkillBuilders.custom();
 const languageStrings = {
     en: {
         translation: {
-            SKILL_NAME: 'W.A Animal Adoptions',
-            WELCOME_MESSAGE: 'Welcome to %s. You can ask questions such as, has %s been adopted...Now, what can I help you with?',
+            SKILL_NAME: 'W.A Animals Adoption',
+            WELCOME_MESSAGE: 'Welcome to %s. You can ask questions such as, has %s been adopted, or is %s good with children. Now, what can I help you with?',
             WELCOME_REPROMPT: 'For instructions on what you can say, please say help me.',
             DISPLAY_CARD_TITLE: '%s  - Info about %s.',
             HELP_MESSAGE: 'You can ask questions such as, has %s been adopted, or, you can say exit...Now, what can I help you with?',
             HELP_REPROMPT: 'You can say things like, has %s been adopted, or you can say exit...Now, what can I help you with?',
+            ADOPTION_INFORMATION: 'For information about adoption, check out W.A animals.org.au',
             STOP_MESSAGE: 'Goodbye!',
-            CAT_REPEAT_MESSAGE: 'Try saying repeat.',
-            CAT_NOT_FOUND_MESSAGE: 'I\'m sorry, I currently do not know ',
-            CAT_NOT_FOUND_WITH_ITEM_NAME: 'the cat names %s. ',
-            CAT_NOT_FOUND_WITHOUT_ITEM_NAME: 'that cat. ',
-            CAT_NOT_FOUND_REPROMPT: 'What else can I help with?'
+            ANIMAL_REPEAT_MESSAGE: 'Try saying repeat.',
+            ANIMAL_NOT_FOUND_MESSAGE: 'I\'m sorry, I currently do not know ',
+            ANIMAL_NOT_FOUND_WITH_ITEM_NAME: 'the animal named %s. ',
+            ANIMAL_NOT_FOUND_WITHOUT_ITEM_NAME: 'that animal. ',
+            ANIMAL_NOT_FOUND_REPROMPT: 'What else can I help with?'
         },
     }
 };
@@ -319,15 +392,15 @@ const docClient = new AWS.DynamoDB.DocumentClient({
     region: config.dynamo.region
 });
 
-// Find cat based on name
-function getCatByName(name) {
+// Find animal based on name
+function getAnimalByName(name) {
     return new Promise((resolve, reject) => {
         let params = {
             TableName: config.dynamo.tableName,
             ExpressionAttributeValues: {
-                ":catName": name
+                ":animal_name": name
             },
-            KeyConditionExpression: "catName = :catName",
+            KeyConditionExpression: "animal_name = :animal_name",
             ScanIndexForward: false,
             Limit: 1
         };
@@ -365,9 +438,11 @@ const LocalizationInterceptor = {
 exports.handler = skillBuilder
     .addRequestHandlers(
         LaunchRequestHandler,
+        InformationHandler,
         AdoptedHandler,
         DetailedHandler,
-        ImportantHandler,
+        AttributeHandler,
+        WhereHandler,
         HelpHandler,
         RepeatHandler,
         ExitHandler,

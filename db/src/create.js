@@ -11,7 +11,7 @@ ddb = new AWS.DynamoDB({
 
 var params = {
     AttributeDefinitions: [{
-            AttributeName: 'catName',
+            AttributeName: 'animal_name',
             AttributeType: 'S'
         },
         {
@@ -20,7 +20,7 @@ var params = {
         }
     ],
     KeySchema: [{
-            AttributeName: 'catName',
+            AttributeName: 'animal_name',
             KeyType: 'HASH'
         },
         {

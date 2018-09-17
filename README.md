@@ -1,6 +1,15 @@
-# WA Animals Alexa
+# WA Animals Adoption (Alexa)
 
 Alexa skill for interacting with the current list of animals up for adoption at [WA Animals](https://waanimals.org.au)
+
+## Try it
+
+* **Alexa**, Open WA Animals Adoption and tell me about Felix
+
+* **Alexa**, Open WA Animals Adoption and find whether Frankie has been adopted
+
+* **Alexa**, Open WA Animals Adoption
+  * Is Julia vaccinated?
 
 ## CloudFormation Deploy
 

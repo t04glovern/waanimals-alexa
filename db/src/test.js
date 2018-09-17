@@ -7,8 +7,8 @@ const docClient = new AWS.DynamoDB.DocumentClient({
 
 let params = {
     TableName: config.dynamo.tableName,
-    ExpressionAttributeValues: { ":catName": "Frankie" },
-    KeyConditionExpression: "catName = :catName",
+    ExpressionAttributeValues: { ":animal_name": "Frankie" },
+    KeyConditionExpression: "animal_name = :animal_name",
     ScanIndexForward: false,
     Limit: 1
 };
