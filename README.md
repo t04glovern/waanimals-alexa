@@ -4,12 +4,17 @@ Alexa skill for interacting with the current list of animals up for adoption at 
 
 ## Try it
 
-* **Alexa**, Open WA Animals Adoption and tell me about Felix
+* **Alexa**, *Open WA Animals Adoption and* tell me about `Felix`
 
-* **Alexa**, Open WA Animals Adoption and find whether Frankie has been adopted
+* **Alexa**, *Open WA Animals Adoption and* find whether `Frankie` has been adopted
 
-* **Alexa**, Open WA Animals Adoption
-  * Is Julia vaccinated?
+* **Alexa**, *Open WA Animals Adoption and* tell me how to adopt
+
+* **Alexa**, *Open WA Animals Adoption and* tell me where `Frankie` can be adopted from
+
+* **Alexa**, *Open WA Animals Adoption*
+  * Is `Julia` vaccinated?
+  * has `Sam` been desexed?
 
 ## CloudFormation Deploy
 

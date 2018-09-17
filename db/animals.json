@@ -3,14 +3,14 @@
         "name": "Paul",
         "adopted": true,
         "like_counter": 16,
-        "location": "St James, WA",
+        "location": "St James, Western Australia",
         "attributes": ["desexed", "vaccinated", "microchipped", "children"],
         "description": "I'm a Chatty Catty and I'd love to share my meows with someone special"
     },
     {
         "animal_id": "EjVPcBAtKHpVKR490rBK",
         "like_counter": 6,
-        "location": "St James, WA",
+        "location": "St James, Western Australia",
         "attributes": ["desexed", "vaccinated", "microchipped"],
         "description": "Is that food I smell?",
         "name": "Greg",
@@ -21,7 +21,7 @@
         "name": "Felix",
         "adopted": true,
         "like_counter": 11,
-        "location": "St James, WA",
+        "location": "St James, Western Australia",
         "attributes": ["vaccinated", "microchipped", "children", "desexed"],
         "description": "Play Hard, Nap Hard is my motto. I get along better with my human playmates then my kitten ones."
     },
@@ -29,7 +29,7 @@
         "animal_id": "W0az66nOQcSeoFpKuKqr",
         "adopted": true,
         "like_counter": 10,
-        "location": "St James, WA",
+        "location": "St James, Western Australia",
         "attributes": ["desexed", "vaccinated", "microchipped"],
         "description": "When I arrived all I wanted to do was snuggle up to my human. Maybe you can be my new human?",
         "name": "Sam"
@@ -39,7 +39,7 @@
         "name": "Bill",
         "adopted": true,
         "like_counter": 8,
-        "location": "St James, WA",
+        "location": "St James, Western Australia",
         "attributes": ["children"],
         "description": "I'm small and still trying to understand the world"
     },
@@ -49,7 +49,7 @@
         "name": "Frankie",
         "adopted": false,
         "like_counter": 8,
-        "location": "St James, WA",
+        "location": "St James, Western Australia",
         "attributes": ["children"]
     },
     {
@@ -57,14 +57,14 @@
         "name": "Sasha",
         "adopted": true,
         "like_counter": 13,
-        "location": "St James, WA",
+        "location": "St James, Western Australia",
         "attributes": ["children"],
         "description": "Don't you dare touch my fishie!"
     },
     {
         "animal_id": "wX26pcw1OaGDdcLxkGsa",
         "like_counter": 8,
-        "location": "St James, WA",
+        "location": "St James, Western Australia",
         "attributes": ["desexed", "vaccinated", "microchipped"],
         "description": "I just had a litter of kittens and am super confused about why that happened!",
         "name": "Julia",
@@ -74,7 +74,7 @@
         "animal_id": "1tfdpcl6oYnbZjCK6kvW",
         "adopted": true,
         "like_counter": 22,
-        "location": "St James, WA",
+        "location": "St James, Western Australia",
         "attributes": ["desexed", "microchipped", "vaccinated", "children"],
         "description": "I'm inquisitive and always curious; should be expected though since I am a cat 😋",
         "name": "Grace"

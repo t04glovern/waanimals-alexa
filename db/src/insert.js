@@ -17,7 +17,7 @@ function addToAnimalTable(animal) {
       adopted: animal.adopted,
       like_counter: animal.like_counter,
       location: animal.location,
-      attributes: animal.cattributes,
+      attributes: animal.attributes,
       description: animal.description
     }
   };

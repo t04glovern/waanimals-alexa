@@ -34,6 +34,7 @@ const InformationHandler = {
             handlerInput.requestEnvelope.request.intent.name === 'InformationIntent';
     },
     async handle(handlerInput) {
+        const requestAttributes = handlerInput.attributesManager.getRequestAttributes();
         const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
 
         const speakOutput = requestAttributes.t('ADOPTION_INFORMATION');
