@@ -1,7 +1,7 @@
 {
   "interactionModel": {
     "languageModel": {
-      "invocationName": "wa animals adoption",
+      "invocationName": "w. a. animals adoption",
       "intents": [{
           "name": "AMAZON.CancelIntent",
           "samples": []

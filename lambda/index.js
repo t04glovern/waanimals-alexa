@@ -72,7 +72,7 @@ const AdoptedHandler = {
             let animal = animalItems.Items[0];
 
             if (animal.adopted) {
-                let response = animal.catName + " has been adopted";
+                let response = name + " has been adopted";
                 sessionAttributes.speakOutput = response;
                 handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
 
@@ -80,7 +80,7 @@ const AdoptedHandler = {
                     .speak(sessionAttributes.speakOutput)
                     .getResponse();
             } else {
-                let response = animal.catName + " has not been adopted";
+                let response = name + " has not been adopted";
                 sessionAttributes.speakOutput = response;
                 handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
 
