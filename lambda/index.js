@@ -38,15 +38,12 @@ const InformationHandler = {
         const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
 
         const speakOutput = requestAttributes.t('ADOPTION_INFORMATION');
-        const repromptOutput = requestAttributes.t('WELCOME_REPROMPT');
 
         handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
 
         return handlerInput.responseBuilder
             .speak(speakOutput)
-            .reprompt(repromptOutput)
             .getResponse();
-
     }
 };
 
