@@ -8,20 +8,28 @@
 npm install
 ```
 
-## Create Table
+## AWS Development
+
+### AWS Create, Insert, Test
 
 ```bash
 npm run create
-```
-
-## Load from JSON
-
-```bash
 npm run insert
+npm run test
 ```
 
-## Test Entries exist
+## Local Development
+
+Run Docker local instance
 
 ```bash
-npm run test
+docker run -p 8000:8000 amazon/dynamodb-local
+```
+
+### Local Create, Insert, Test
+
+```bash
+npm run local-create
+npm run local-insert
+npm run local-test
 ```
